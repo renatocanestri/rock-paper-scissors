@@ -1,8 +1,5 @@
-// create a function to computer randomly return rock-paper-scissor
 function getComputerChoice() {
-    // choose a random number from 0 up to 2
     let randomNumber = Math.floor(Math.random() * 3);
-    // relate each number with rock-paper-scissor
     let computerChoice;
     if (randomNumber === 0) {
         computerChoice = 'rock';
@@ -11,16 +8,12 @@ function getComputerChoice() {
     } else {
         computerChoice = 'scissor';
     };
-    // return the computerChoice
     return computerChoice;
 };
 
-// create a function to play one round of computer vs player
-//the function receive two arguments: playerSelection and computerSelection
 function playRound(playerSelection, computerSelection) {
     let winnerScreen;
     let result;
-    //if, else if, else conditionals are used to select the winner of the round
     if (playerSelection.toLowerCase() === 'rock' && computerSelection === 'rock') {
         winnerScreen = 'It\'s a tie! Rock ties Rock';
         result = 'tie';
@@ -52,7 +45,6 @@ function playRound(playerSelection, computerSelection) {
     return [winnerScreen, result];
 }
 
-// create a function "game" to play a 5 round game
 function game() {
     let playerSelection;
     let computerSelection;
