@@ -1,3 +1,32 @@
+const rockBtn = document.querySelector('#rock');
+const paperBtn = document.querySelector('#paper');
+const scissorBtn = document.querySelector('#scissor');
+const results = document.querySelector('.results');
+const nodeStartText = document.querySelector('.startText');
+const winnerAnnouncementDiv = document.querySelector('.winnerAnnouncement');
+
+const h2Score = document.createElement('h2');
+
+let playerCount = 0;
+let computerCount = 0;
+let roundCount = 0;
+let endGame = false;
+
+rockBtn.addEventListener('click', () => {
+	let playerSelection = 'rock';
+	playGame(playerSelection);
+});
+
+paperBtn.addEventListener('click', () => {
+	let playerSelection = 'paper';
+	playGame(playerSelection);
+});
+
+scissorBtn.addEventListener('click', () => {
+	let playerSelection = 'scissor';
+	playGame(playerSelection);
+});
+
 function getComputerChoice() {
     let randomNumber = Math.floor(Math.random() * 3);
     let computerChoice;
@@ -12,65 +41,60 @@ function getComputerChoice() {
 };
 
 function playRound(playerSelection, computerSelection) {
-    let winnerScreen;
-    let result;
-    if (playerSelection.toLowerCase() === 'rock' && computerSelection === 'rock') {
-        winnerScreen = 'It\'s a tie! Rock ties Rock';
-        result = 'tie';
-    } else if (playerSelection.toLowerCase() === 'rock' && computerSelection === 'scissor') {
-        winnerScreen = 'You win! Rock beats Scissor';
-        result = 'win';
-    } else if (playerSelection.toLowerCase() === 'rock' && computerSelection === 'paper') {
-        winnerScreen = 'You loose! Paper beats Rock';
-        result = 'loose';
-    } else if (playerSelection.toLowerCase() === 'paper' && computerSelection === 'paper') {
-        winnerScreen = 'It\'s a tie! Paper ties Paper';
-        result = 'tie';
-    } else if (playerSelection.toLowerCase() === 'paper' && computerSelection === 'rock') {
-        winnerScreen = 'You win! Paper beats Rock';
-        result = 'win';
-    } else if (playerSelection.toLowerCase() === 'paper' && computerSelection === 'scissor') {
-        winnerScreen = 'You loose! Scissor beats Paper';
-        result = 'loose';
-    } else if (playerSelection.toLowerCase() === 'scissor' && computerSelection === 'scissor') {
-        winnerScreen = 'It\'s a tie! Scissor ties Scissor';
-        result = 'tie';
-    } else if (playerSelection.toLowerCase() === 'scissor' && computerSelection === 'paper') {
-        winnerScreen = 'You win! Scissor beats Paper';
-        result = 'win';
-    } else if (playerSelection.toLowerCase() === 'scissor' && computerSelection === 'rock') {
-        winnerScreen = 'You loose! Rock beats Scissor';
-        result = 'loose';
-    }
-    return [winnerScreen, result];
-}
-
-function game() {
-    let playerSelection;
-    let computerSelection;
-    let playerCount = 0;
-    let computerCount = 0;
-    for (let i = 0; i < 5; i++) {
-        playerSelection = prompt('Select');
-        computerSelection = getComputerChoice();
-        playRoundResult = playRound(playerSelection, computerSelection);
-        if (playRoundResult[1] === 'win') {
-            playerCount += 1;
-        } else if (playRoundResult[1] === 'loose') {
-            computerCount += 1;
-        } else {
-            playerCount += 0;
-            computerCount += 0;
-        }
-        console.log(playRoundResult[0]);
-        console.log('Player : ', playerCount, ' Computer : ', computerCount);
-    };
-    if (playerCount > computerCount) {
-        console.log('Congratulations, you win!');
-    } else if (playerCount < computerCount) {
-        console.log('Oh no, you loose!');
+	const roundResult = document.createElement('p');
+	if (playerSelection === 'rock' && computerSelection === 'paper') {
+		roundResult.innerText = `Round ${roundCount}: Computer wins! ${computerSelection} beats ${playerSelection}!`;
+		computerCount++;
+	} else if (playerSelection === 'rock' && computerSelection === 'scissor') {
+		roundResult.innerText = `Round ${roundCount}: Player wins! ${playerSelection} beats ${computerSelection}!`;
+		playerCount++;
+	} else if (playerSelection === 'paper' && computerSelection === 'scissor') {
+		roundResult.innerText = `Round ${roundCount}: Computer wins! ${computerSelection} beats ${playerSelection}!`;
+		computerCount++;
+	} else if (playerSelection === 'paper' && computerSelection === 'rock') {
+		roundResult.innerText = `Round ${roundCount}: Player wins! ${playerSelection} beats ${computerSelection}!`;
+		playerCount++;
+	} else if (playerSelection === 'scissor' && computerSelection === 'rock') {
+		roundResult.innerText = `Round ${roundCount}: Computer wins! ${computerSelection} beats ${playerSelection}!`;
+		computerCount++;
+	} else if (playerSelection === 'scissor' && computerSelection === 'paper') {
+		roundResult.innerText = `Round ${roundCount}: Player wins! ${playerSelection} beats ${computerSelection}!`;
+		playerCount++;
     } else {
-        console.log('Nobody wins, it\'s a tie!');
-    }
+		roundResult.innerText = `Round ${roundCount}: It\'s a tie! Both select ${playerSelection}!`;
+	};
+	roundResult.classList.add('roundResult');
+	results.appendChild(roundResult);
 };
 
+function playGame(playerSelection) {
+	roundCount++;
+	for (; playerCount < 5 && computerCount < 5;) {
+		playRound(playerSelection, getComputerChoice());
+		break;
+	};
+	scoreCount();
+	if (!(playerCount < 5 && computerCount < 5) && endGame === false){
+		endGame = true;
+		gameWinnerScreen();
+	} else {};
+};
+
+function scoreCount() {
+	h2Score.innerText = `Score: Player ${playerCount} - ${computerCount} Computer`;
+	h2Score.classList.add('h2Score');
+	if (roundCount === 1) {
+		nodeStartText.parentNode.replaceChild(h2Score, nodeStartText);
+	} else {};
+};
+
+function gameWinnerScreen() {
+	const winnerAnnouncement = document.createElement('p');
+	winnerAnnouncement.classList.add('winnerFinalScreen')
+	if (playerCount > computerCount) {
+		winnerAnnouncement.innerText = 'YOU WIN!!!';
+	} else {
+		winnerAnnouncement.innerText = 'GAME-OVER, COMPUTER WINS!!!';
+	};
+	winnerAnnouncementDiv.appendChild(winnerAnnouncement);
+};
